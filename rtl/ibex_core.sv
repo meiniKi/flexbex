@@ -81,7 +81,6 @@ module ibex_core #(
 
     output logic        cx_clk,
     output logic        cx_rst,
-    output logic        cx_clk_en,      // TODO
     output logic        cx_req_valid,
     output logic [1:0]  cx_cxu_id,
     output logic [1:0]  cx_state_id,
