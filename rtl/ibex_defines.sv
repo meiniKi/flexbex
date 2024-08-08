@@ -231,10 +231,6 @@ typedef enum logic[11:0] {
   CSR_MEPC      = 12'h341,
   CSR_MCAUSE    = 12'h342,
 
-  // CX
-  CSR_MCX_SEL   = 12'h400,
-  CSR_CX_STAT   = 12'h401,
-
   // Debug/trace
   CSR_TSELECT   = 12'h7a0,
   CSR_TDATA1    = 12'h7a1,
@@ -248,6 +244,11 @@ typedef enum logic[11:0] {
   CSR_DSCRATCH0 = 12'h7b2, // optional
   CSR_DSCRATCH1 = 12'h7b3  // optional
 
+  // CX
+  CSR_CX_IDX    = 12'h800,
+  CSR_CX_STAT   = 12'h801,
+  CSR_MCX_EN    = 12'hBC1,
+  CSR_MCX_IDX   = 12'hBC0
 
 } csr_num_e;
 

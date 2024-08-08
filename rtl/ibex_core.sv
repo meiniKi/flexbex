@@ -78,15 +78,25 @@ module ibex_core #(
 
     // CX Interface: ignore unused signals
     // to let it optimze by the synthesizer
-    input logic         cx_ci,
-    input logic         cx_si,
-    input logic         cx_of,
-    input logic         cx_fi,
-    input logic         cx_op,
-    input logic         cx_cu,
 
-    output logic [7:0]  cx_state_id,
-    output logic [7:0]  cx_cxu_id,
+    output logic        cx_clk,
+    output logic        cx_rst,
+    output logic        cx_clk_en,      // TODO
+    output logic        cx_req_valid,
+    output logic [1:0]  cx_cxu_id,
+    output logic [1:0]  cx_state_id,
+    //output logic []     cx_req_func,    // ??
+    output logic [31:0] cx_req_data0,   // TODO
+    output logic [31:0] cx_req_data1,   // TODO
+
+    input  logic        cx_resp_valid,
+    input  logic        cx_resp_ci,
+    input  logic        cx_resp_si,
+    input  logic        cx_resp_fi,
+    input  logic        cx_resp_op,
+    input  logic [31:0] cx_resp_data,
+
+    output logic [15:0] cx_virt_state_id,
 
     // CPU Control Signals
     input  logic        fetch_enable_i,
@@ -253,6 +263,14 @@ module ibex_core #(
       .test_en_i ( test_en_i       ),
       .clk_o     ( clk             )
   );
+
+
+  //////////////
+  // CX       //
+  //////////////
+
+  assign cx_clk = clk_i;
+  assign cx_rst = rst_ni;
 
   //////////////
   // IF stage //
@@ -553,14 +571,15 @@ module ibex_core #(
       .csr_cause_i             ( csr_cause          ),
       .csr_save_cause_i        ( csr_save_cause     ),
 
-      .cx_ci                   ( cx_ci               ),
-      .cx_si                   ( cx_si               ),
-      .cx_of                   ( cx_of               ),
-      .cx_fi                   ( cx_fi               ),
-      .cx_op                   ( cx_op               ),
-      .cx_cu                   ( cx_cu               ),
-      .cx_state_id             ( cx_state_id         ),
-      .cx_cxu_id               ( cx_cxu_id           ),
+      .cx_resp_valid           ( cx_resp_valid      ),
+      .cx_ci                   ( cx_resp_ci         ),
+      .cx_si                   ( cx_resp_si         ),
+      .cx_fi                   ( cx_resp_fi         ),
+      .cx_op                   ( cx_resp_op         ),
+      .cx_cxu_id               ( cx_cxu_id          ),
+      .cx_state_id             ( cx_state_id        ),
+      .cx_virt_state_id        ( cx_virt_state_id   ),
+      .mcx_en                  ( ),                     // TODO
 
       // performance counter related signals
       .if_valid_i              ( if_valid           ),

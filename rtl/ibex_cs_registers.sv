@@ -75,14 +75,15 @@ module ibex_cs_registers #(
     input  logic                     csr_save_cause_i,
 
     // cx
-    input logic                      cx_ci,
-    input logic                      cx_si,
-    input logic                      cx_of,
-    input logic                      cx_fi,
-    input logic                      cx_op,
-    input logic                      cx_cu,
-    output logic [7:0]               cx_state_id,
-    output logic [7:0]               cx_cxu_id,
+    input  logic                     cx_resp_valid,
+    input  logic                     cx_ci,
+    input  logic                     cx_si,
+    input  logic                     cx_fi,
+    input  logic                     cx_op,
+    output logic [1:0]               cx_cxu_id,
+    output logic [1:0]               cx_state_id,
+    output logic [15:0]              cx_virt_state_id,
+    output logic [15:0]              mcx_en,
 
     // Performance Counters
     input  logic                     if_valid_i,        // IF stage gives a new instruction
@@ -199,11 +200,24 @@ module ibex_cs_registers #(
   logic [31:0] exception_pc;
 
   // CX
-  logic [7:0] cx_state_id_q, cx_state_id_n;
-  logic [7:0] cx_cxu_id_q, cx_cxu_id_n;
+  logic cx_ci_q, cx_ci_n;
+  logic cx_si_q, cx_si_n;
+  logic cx_fi_q, cx_fi_n;
+  logic cx_op_q, cx_op_n;
 
-  assign cx_state_id = cx_state_id_q;
-  assign cx_cxu_id   = cx_cxu_id_q;
+  logic [15:0]  mcx_en_q, mcx_en_n;
+
+  logic [1:0]   cx_cxu_id_q, cx_cxu_n;
+  logic [1:0]   cx_state_id_q, cx_state_n;
+  logic [15:0]  cx_virt_state_id_q, cx_virt_state_n;
+
+  logic [1:0]   mcx_cxu_id_q, mcx_cxu_id_n;
+  logic [1:0]   mcx_state_id_q, mcx_state_id_n;
+
+  assign cx_cxu_id        = cx_cxu_q;
+  assign cx_state_id      = cx_state_q;
+  assign cx_virt_state_id = cx_virt_state_q;
+  assign mcx_en           = mcx_en_q;
 
   /////////////
   // CSR reg //
@@ -238,8 +252,11 @@ module ibex_cs_registers #(
       CSR_MISA: csr_rdata_int = MISA_VALUE;
 
       // cx (read back possible to ease debugging)
-      CSR_MCX_SEL: csr_rdata_int = {8'b0, cx_state_id_r, 8'b0, cx_cxu_id_r};
-      CSR_CX_STAT: csr_rdata_int = {26'b0, cx_ci, cx_si, cx_of, cx_fi, cx_op, cx_cu};
+      CSR_CX_IDX:  csr_rdata_int = {8'b0, cx_virt_state_id_q, 2'b0, cx_state_id_q, 2'b0, cx_cxu_id_q};
+      // TODO: Reading this CSR waits for all CXUs to complete whatever computation they are doing
+      CSR_CX_STAT: csr_rdata_int = {26'b0, cx_op_q, cx_fi_q, 1'b0, cx_ci_q, cx_si_q, 1'b0};
+      CSR_MCX_EN:  csr_rdata_int = {16'b0, mcx_en_q};
+      CSR_MCX_IDX: csr_rdata_int = {8'b0, 16'b0, 2'b0, mcx_state_id_q, 2'b0, mcx_cxu_id_q};
 
       CSR_DCSR: csr_rdata_int = dcsr_q;
       CSR_DPC: csr_rdata_int = depc_q;
@@ -261,6 +278,41 @@ module ibex_cs_registers #(
     mcause_n     = mcause_q;
     exception_pc = pc_id_i;
 
+    cx_cxu_id_n        = cx_cxu_id_q;
+    cx_state_id_n      = cx_state_id_q;
+    cx_virt_state_id_n = cx_virt_state_id_q;
+    mcx_cxu_id_n       = mcx_cxu_id_q;
+    mcx_state_id_n     = mcx_state_id_q;
+
+    // CX
+    cx_ci_n         = cx_ci_q;
+    cx_si_n         = cx_si_q;
+    cx_fi_n         = cx_fi_q;
+    cx_op_n         = cx_op_q;
+    mcx_cxu_id_n    = mcx_cxu_id_q;
+    mcx_state_id_n  = mcx_state_id_q;
+
+    if (cx_resp_valid)
+    begin
+      cx_ci_n    = cx_ci_q | cx_ci;
+      cx_si_n    = cx_si_q | cx_si;
+      cx_fi_n    = cx_fi_q | cx_fi;
+      cx_op_n    = cx_op_q | cx_op;
+
+      // TODO: check that part
+      // Updated by hardware when executing a custom instruction 
+      // and cx_index doesn’t match mcx_index
+      // (compares cxu_id and state_id only, not virt_state_id)
+      // ==> update to what?
+      if ((mcx_cxu_id_q != cx_cxu_id_q) &&
+          (mcx_state_id_q != cx_state_id_q))
+      begin
+        // TODO
+        //mcx_state_id_n = ;
+        //mcx_cxu_id_n = ;
+      end
+    end
+    
     case (csr_addr_i)
       // mstatus: IE bit
       CSR_MSTATUS: if (csr_we_int) begin
@@ -309,12 +361,32 @@ module ibex_cs_registers #(
         begin
           dscratch1_n = csr_wdata_int;
         end
-      CSR_MCX_SEL:
+      CSR_CX_IDX:
       if (csr_we_int)
         begin
-          cx_state_id_n = csr_wdata_int[23:16];
-          cx_cxu_id_n   = csr_wdata_int[7:0];  
+          cx_cxu_id_n        = csr_wdata_int[1:0];
+          cx_state_id_n      = csr_wdata_int[5:4];
+          cx_virt_state_id_n = csr_wdata_int[24:8];
         end
+      CSR_CX_STAT:
+      if (csr_we_int & (csr_wdata_int == 'b0))
+        begin
+          cx_ci_n = '0;
+          cx_si_n = '0;
+          cx_fi_n = '0;
+          cx_op_n = '0;
+        end
+      CSR_MCX_EN:
+      if (csr_we_int)
+        begin
+          mcx_en_q = csr_wdata_int[15:0];
+        end
+      CSR_MCX_IDX:
+      if (csr_we_int)
+      begin
+        mcx_cxu_id_n   = csr_wdata_int[1:0];
+        mcx_state_id_n = csr_wdata_int[5:4];
+      end
       default: ;
     endcase
 
@@ -408,6 +480,17 @@ module ibex_cs_registers #(
       };
       dscratch0_q <= '0;
       dscratch1_q <= '0;
+
+      cx_cxu_id_q         <= '0;
+      cx_state_id_q       <= '0;
+      cx_virt_state_id_q  <= '0:
+      mcx_cxu_id_q        <= '0;
+      mcx_state_id_q      <= '0;
+      cx_op_q             <= '0;
+      cx_fi_q             <= '0;
+      cx_ci_q             <= '0;
+      cx_si_q             <= '0;
+      mcx_en_q            <= '0;
     end else begin
       // update CSRs
       mstatus_q  <= '{
@@ -423,8 +506,16 @@ module ibex_cs_registers #(
       dscratch0_q<= dscratch0_n;
       dscratch1_q<= dscratch1_n;
 
-      cx_cxu_id_q   <= cx_cxu_id_n;
-      cx_state_id_q <= cx_state_id_n; 
+      cx_ci_q             <= cx_ci_n;
+      cx_si_q             <= cx_si_n;
+      cx_fi_q             <= cx_fi_n;
+      cx_op_q             <= cx_op_n;
+      mcx_en_q            <= mcx_en_n;
+      cx_cxu_id_q         <= cx_cxu_id_n;
+      cx_state_id_q       <= cx_state_id_n;
+      cx_virt_state_id_q  <= cx_virt_state_id_n;
+      mcx_cxu_id_q        <= mcx_cxu_id_n;
+      mcx_state_id_q      <= mcx_state_id_n;
     end
   end
 
