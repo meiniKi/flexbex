@@ -444,7 +444,7 @@ module ibex_decoder #(
           endcase
         end
       end
-      OPCODE_eFPGA: begin
+      OPCODE_CX_REG: begin
         regfile_we     = 1'b1;
         eFPGA_operator_o          =   instr_rdata_i[13:12];
         eFPGA_delay_o             =   instr_rdata_i[28:25];
