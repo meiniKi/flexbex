@@ -104,9 +104,6 @@ module ibex_core #(
     input  logic [N_EXT_PERF_COUNTERS-1:0] ext_perf_counters_i,
     // unused, since we're not doing OoO
     output logic [1:0] cx_id_o,
-    // TODO: assign from CSRs
-    output logic [1:0] cx_cxu_o,
-    output logic [1:0] cx_state_o,
     output logic [31:0] cx_insn_o,
     output logic [24:0] cx_func_o,
 );
@@ -280,8 +277,6 @@ module ibex_core #(
 
   assign cx_clk = clk_i;
   assign cx_rst = rst_ni;
-  assign cx_cxu_o = cx_cxu_id;
-  assign cx_state_o = cx_state_id;
 
   //////////////
   // IF stage //
