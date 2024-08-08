@@ -170,21 +170,21 @@ module ibex_ex_block #(
   ////////////////
 logic eFPGA_ready;
 
-    
-    // ibex_eFPGA eFPGA_i (
-    //     .clk                ( clk                   ),
-    //     .rst_n              ( rst_n                 ),
-    //     .en_i               ( eFPGA_en_i             ),
-    //     .operator_i         ( cx_optype_i      ),
-    // //    .operand_a_i        ( eFPGA_operand_a_i     ),
-    // //    .operand_b_i        ( eFPGA_operand_b_i     ),
-    //     .ready_o            ( eFPGA_ready           ), //should be 0 when working - Drives ex_ready_o to ID Stage
-    //     .endresult_o           ( eFPGA_result          ),
-    //     .result_a_i         ( eFPGA_result_a_i      ),
-    //     .result_b_i         ( eFPGA_result_b_i      ),
-    //     .result_c_i         ( eFPGA_result_c_i      ),
-    //     .delay_i            ( eFPGA_delay_i         )
-    // );
+
+    ibex_eFPGA eFPGA_i (
+        .clk                ( clk                   ),
+        .rst_n              ( rst_n                 ),
+        .en_i               ( eFPGA_en_i             ),
+        .operator_i         ( cx_optype_i      ),
+    //    .operand_a_i        ( eFPGA_operand_a_i     ),
+    //    .operand_b_i        ( eFPGA_operand_b_i     ),
+        .ready_o            ( eFPGA_ready           ), //should be 0 when working - Drives ex_ready_o to ID Stage
+        .endresult_o           ( eFPGA_result          ),
+        .result_a_i         ( eFPGA_result_a_i      ),
+        .result_b_i         ( eFPGA_result_b_i      ),
+        .result_c_i         ( eFPGA_result_c_i      ),
+        .delay_i            ( eFPGA_delay_i         )
+    );
 
 
 
