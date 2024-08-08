@@ -86,8 +86,8 @@ module ibex_core #(
     output logic [1:0]  cx_cxu_id,
     output logic [1:0]  cx_state_id,
     //output logic []     cx_req_func,    // ??
-    output logic [31:0] cx_req_data0,   // TODO
-    output logic [31:0] cx_req_data1,   // TODO
+    output logic [31:0] cx_req_data0,
+    output logic [31:0] cx_req_data1,
 
     input  logic        cx_resp_valid,
     input  logic        cx_resp_ci,
@@ -102,10 +102,6 @@ module ibex_core #(
     input  logic        fetch_enable_i,
 
     input  logic [N_EXT_PERF_COUNTERS-1:0] ext_perf_counters_i,
-    // AKA cx_data0 - maybe rename?
-    output logic [31:0] eFPGA_operand_a_o,
-    // as above, AKA cx_data1
-    output logic [31:0] eFPGA_operand_b_o,
     // unused, since we're not doing OoO
     output logic [1:0] cx_id_o,
     // TODO: assign from CSRs
@@ -401,8 +397,8 @@ module ibex_core #(
 
       .eFPGA_en_o                   ( eFPGA_en               ),
       .cx_optype_o             ( cx_optype         ),
-      .eFPGA_operand_a_o            ( eFPGA_operand_a_o        ),
-      .eFPGA_operand_b_o            ( eFPGA_operand_b_o        ),
+      .eFPGA_operand_a_o            ( cx_req_data0        ),
+      .eFPGA_operand_b_o            ( cx_req_data1        ),
       .eFPGA_delay_o                ( eFPGA_delay            ),
       .cx_func_o                    ( cx_func                ),
       .cx_insn_o                    ( cx_insn                ),
