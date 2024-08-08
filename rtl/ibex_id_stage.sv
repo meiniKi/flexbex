@@ -91,10 +91,13 @@ module ibex_id_stage #(
     //eFPGA
 
     output logic                      eFPGA_en_o,
-    output logic [1:0]                eFPGA_operator_o,
+    output logic [1:0]                cx_optype_o,
     output logic [31:0]               eFPGA_operand_a_o,
     output logic [31:0]               eFPGA_operand_b_o,
     output logic  [3:0]               eFPGA_delay_o,
+    output logic  [24:0]               cx_func_o,
+    output logic  [31:0]               cx_insn_o,
+
 
     // CSR
     output logic                      csr_access_ex_o,
@@ -228,8 +231,10 @@ module ibex_id_stage #(
   //eFPGA Control
   logic        eFPGA_en;
   logic        eFPGA_int_en;
-  logic [1:0]  eFPGA_operator;
+  logic [1:0]  cx_optype;
   logic [3:0]  eFPGA_delay;
+  logic [25:0] cx_func;
+  logic [31:0] cx_insn;
 
   assign eFPGA_en_o = eFPGA_int_en;
 
@@ -423,14 +428,18 @@ module ibex_id_stage #(
       .branch_in_id_o                  ( branch_in_id              ),
 
       //eFPGA_
-      .eFPGA_operator_o                (eFPGA_operator           ),
+      .cx_optype_o                (cx_optype           ),
       .eFPGA_int_en_o                  (eFPGA_int_en),
       .eFPGA_delay_o                   (eFPGA_delay)
+      .cx_func_o                  (cx_func)
+      .cx_insn_o                  (cx_insn)
   );
 
 
-  assign eFPGA_operator_o = eFPGA_operator;
+  assign cx_optype_o = cx_optype;
   assign eFPGA_delay_o = eFPGA_delay;
+  assign cx_func_o = cx_func;
+  assign cx_insn_o = cx_insn;
 
   ////////////////
   // Controller //

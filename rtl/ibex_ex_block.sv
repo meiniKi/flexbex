@@ -44,12 +44,10 @@ module ibex_ex_block #(
 
     //sFPGA Enable
     input  logic                  eFPGA_en_i,
-    input  logic [1:0]            eFPGA_operator_i,
+    input  logic [1:0]            cx_optype_i,
   //  input  logic [31:0]           eFPGA_operand_a_i,
   //  input  logic [31:0]           eFPGA_operand_b_i,
     input  logic [31:0]           eFPGA_result_a_i,
-    input  logic [31:0]           eFPGA_result_b_i,
-    input  logic [31:0]           eFPGA_result_c_i,
     input  logic [3:0]            eFPGA_delay_i,
 
 
@@ -172,11 +170,12 @@ module ibex_ex_block #(
   ////////////////
 logic eFPGA_ready;
 
+
     ibex_eFPGA eFPGA_i (
         .clk                ( clk                   ),
         .rst_n              ( rst_n                 ),
         .en_i               ( eFPGA_en_i             ),
-        .operator_i         ( eFPGA_operator_i      ),
+        .operator_i         ( cx_optype_i      ),
     //    .operand_a_i        ( eFPGA_operand_a_i     ),
     //    .operand_b_i        ( eFPGA_operand_b_i     ),
         .ready_o            ( eFPGA_ready           ), //should be 0 when working - Drives ex_ready_o to ID Stage
