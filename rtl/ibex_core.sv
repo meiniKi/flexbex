@@ -113,8 +113,6 @@ module ibex_core #(
     output logic [1:0] cx_state_o,
     output logic [31:0] cx_insn_o,
     output logic [24:0] cx_func_o,
-
-    input  logic [31:0] eFPGA_result_a_i
 );
 
   import ibex_defines::*;
@@ -487,7 +485,7 @@ module ibex_core #(
       .cx_optype_i           (cx_optype         ),
       //.eFPGA_operand_a_i          (eFPGA_operand_a        ),
       //.eFPGA_operand_b_i          (eFPGA_operand_b        ),
-      .eFPGA_result_a_i           (eFPGA_result_a_i),
+      .eFPGA_result_a_i           (cx_resp_data),
       .eFPGA_delay_i              (eFPGA_delay),
       // To IF: Jump and branch target and decision
       .jump_target_o              ( jump_target_ex        ),
