@@ -40,8 +40,8 @@ typedef enum logic [6:0] {
   OPCODE_JAL    = 7'h6f,
   OPCODE_AUIPC  = 7'h17,
   OPCODE_LUI    = 7'h37,
-  OPCODE_CX_REG  = 7'h0b      // 0001011
-  OPCODE_CX_IMM  = 7'h2b      // 0101011
+  OPCODE_CX_REG  = 7'h0b,      // 0001011
+  OPCODE_CX_IMM  = 7'h2b,      // 0101011
   OPCODE_CX_FLEX  = 7'h5b      // 1011011
 
 } opcode_e;
@@ -242,7 +242,7 @@ typedef enum logic[11:0] {
 
   // Debug
   CSR_DSCRATCH0 = 12'h7b2, // optional
-  CSR_DSCRATCH1 = 12'h7b3  // optional
+  CSR_DSCRATCH1 = 12'h7b3, // optional
 
   // CX
   CSR_CX_IDX    = 12'h800,

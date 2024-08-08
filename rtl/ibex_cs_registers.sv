@@ -379,7 +379,7 @@ module ibex_cs_registers #(
       CSR_MCX_EN:
       if (csr_we_int)
         begin
-          mcx_en_q = csr_wdata_int[15:0];
+          mcx_en_n = csr_wdata_int[15:0];
         end
       CSR_MCX_IDX:
       if (csr_we_int)
@@ -483,7 +483,7 @@ module ibex_cs_registers #(
 
       cx_cxu_id_q         <= '0;
       cx_state_id_q       <= '0;
-      cx_virt_state_id_q  <= '0:
+      cx_virt_state_id_q  <= '0;
       mcx_cxu_id_q        <= '0;
       mcx_state_id_q      <= '0;
       cx_op_q             <= '0;
