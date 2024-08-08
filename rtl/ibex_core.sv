@@ -100,7 +100,6 @@ module ibex_core #(
     output logic [1:0] cx_id_o;
     output logic [1:0] cx_cxu_o;
     output logic [1:0] cx_state_o;
-    // TODO: HOW BIG ARE THESE?????
     output logic [31:0] cx_insn_o;
     output logic [24:0] cx_func_o;
 
