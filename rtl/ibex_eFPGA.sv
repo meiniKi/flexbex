@@ -23,6 +23,8 @@ eFPGA_fsm eFPGA_fsm_r;
 
 reg [3:0] count;
 
+// TODO: sort this out for CX
+
 //this is a placeholder for the eFPGA
 
 always_ff @(posedge clk) begin
