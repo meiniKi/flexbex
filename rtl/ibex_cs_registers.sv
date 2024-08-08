@@ -84,6 +84,7 @@ module ibex_cs_registers #(
     output logic [1:0]               cx_state_id,
     output logic [15:0]              cx_virt_state_id,
     output logic [15:0]              mcx_en,
+    output logic                     cx_wait,
 
     // Performance Counters
     input  logic                     if_valid_i,        // IF stage gives a new instruction
@@ -205,6 +206,8 @@ module ibex_cs_registers #(
   logic cx_fi_q, cx_fi_n;
   logic cx_op_q, cx_op_n;
 
+  logic cx_wait_q, cx_wait_n;
+
   logic [15:0]  mcx_en_q, mcx_en_n;
 
   logic [1:0]   cx_cxu_id_q, cx_cxu_n;
@@ -218,6 +221,7 @@ module ibex_cs_registers #(
   assign cx_state_id      = cx_state_q;
   assign cx_virt_state_id = cx_virt_state_q;
   assign mcx_en           = mcx_en_q;
+  assign cx_wait          = cx_wait_q | cx_wait_n;
 
   /////////////
   // CSR reg //
@@ -226,6 +230,13 @@ module ibex_cs_registers #(
   // read logic
   always_comb begin
     csr_rdata_int = '0;
+    cx_wait_n     = cx_wait_q;
+
+    if (cx_resp_valid)
+    begin
+      cx_wait_n = 1'b0;
+    end
+
     case (csr_addr_i)
 
       // mstatus: always M-mode, contains IE bit
@@ -254,7 +265,14 @@ module ibex_cs_registers #(
       // cx (read back possible to ease debugging)
       CSR_CX_IDX:  csr_rdata_int = {8'b0, cx_virt_state_id_q, 2'b0, cx_state_id_q, 2'b0, cx_cxu_id_q};
       // TODO: Reading this CSR waits for all CXUs to complete whatever computation they are doing
-      CSR_CX_STAT: csr_rdata_int = {26'b0, cx_op_q, cx_fi_q, 1'b0, cx_ci_q, cx_si_q, 1'b0};
+      CSR_CX_STAT:
+      begin
+        csr_rdata_int = {26'b0, cx_op_q, cx_fi_q, 1'b0, cx_ci_q, cx_si_q, 1'b0};
+        if (~cx_resp_valid)
+        begin
+          cx_wait_n   = 1'b1;
+        end
+      end
       CSR_MCX_EN:  csr_rdata_int = {16'b0, mcx_en_q};
       CSR_MCX_IDX: csr_rdata_int = {8'b0, 16'b0, 2'b0, mcx_state_id_q, 2'b0, mcx_cxu_id_q};
 
@@ -491,6 +509,7 @@ module ibex_cs_registers #(
       cx_ci_q             <= '0;
       cx_si_q             <= '0;
       mcx_en_q            <= '0;
+      cx_wait_q           <= '0;
     end else begin
       // update CSRs
       mstatus_q  <= '{
@@ -516,6 +535,7 @@ module ibex_cs_registers #(
       cx_virt_state_id_q  <= cx_virt_state_id_n;
       mcx_cxu_id_q        <= mcx_cxu_id_n;
       mcx_state_id_q      <= mcx_state_id_n;
+      cx_wait_q           <= cx_wait_n;
     end
   end
 
