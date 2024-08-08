@@ -242,7 +242,7 @@ typedef enum logic[11:0] {
 
   // Debug
   CSR_DSCRATCH0 = 12'h7b2, // optional
-  CSR_DSCRATCH1 = 12'h7b3  // optional
+  CSR_DSCRATCH1 = 12'h7b3,  // optional
 
   // CX
   CSR_CX_IDX    = 12'h800,

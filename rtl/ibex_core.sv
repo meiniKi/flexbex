@@ -114,7 +114,7 @@ module ibex_core #(
     output logic [31:0] cx_insn_o,
     output logic [24:0] cx_func_o,
 
-    input  logic [31:0] eFPGA_result_a_i,
+    input  logic [31:0] eFPGA_result_a_i
 );
 
   import ibex_defines::*;
@@ -286,6 +286,8 @@ module ibex_core #(
 
   assign cx_clk = clk_i;
   assign cx_rst = rst_ni;
+  assign cx_cxu_o = cx_cxu_id;
+  assign cx_state_o = cx_state_id;
 
   //////////////
   // IF stage //
