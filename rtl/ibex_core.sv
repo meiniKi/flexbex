@@ -98,6 +98,7 @@ module ibex_core #(
     output logic [31:0] eFPGA_operand_b_o,
     // unused, since we're not doing OoO
     output logic [1:0] cx_id_o;
+    // TODO: assign from CSRs
     output logic [1:0] cx_cxu_o;
     output logic [1:0] cx_state_o;
     output logic [31:0] cx_insn_o;
