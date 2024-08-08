@@ -84,9 +84,13 @@ module ibex_decoder #(
     output logic                     branch_in_id_o,
 
 //change
-    output logic  [1:0]              eFPGA_operator_o,
+    output logic  [1:0]              cx_optype_o,
     output logic                     eFPGA_int_en_o,
+    // TODO: don't need this probably
     output logic  [3:0]              eFPGA_delay_o
+    output logic [24:0]             cx_func_o,
+    output logic [31:0]             cx_insn_o,
+
 );
 
 
@@ -126,7 +130,7 @@ module ibex_decoder #(
     multdiv_signed_mode_o       = 2'b00;
 
     eFPGA_int_en                = 1'b0;
-    eFPGA_operator_o            = 2'b00;
+    cx_optype_o            = 2'b00;
 
     regfile_we                  = 1'b0;
 
@@ -445,10 +449,22 @@ module ibex_decoder #(
         end
       end
       OPCODE_CX_REG: begin
-        regfile_we     = 1'b1;
-        eFPGA_operator_o          =   instr_rdata_i[13:12];
-        eFPGA_delay_o             =   instr_rdata_i[28:25];
+        // Inhibit regfile writeback according to CX spec
+        regfile_we                =   instr_rdata_i[12];
+        cx_optype_o          =   2'b00;
+        //eFPGA_delay_o             =   instr_rdata_i[28:25];
         eFPGA_int_en              =   1'b1;
+      end
+      OPCODE_CX_IMM: begin
+        // Inhibit regfile writeback according to CX spec
+        regfile_we                =   instr_rdata_i[12];
+        alu_op_b_mux_sel_o  = OP_B_IMM;
+        imm_b_mux_sel_o     = IMM_B_I;
+
+      end
+      OPCODE_CX_FLEX: begin
+        // Inhibit regfile writeback according to CX spec
+        regfile_we                =   instr_rdata_i[12];
       end
       /////////////
       // Special //
@@ -568,6 +584,9 @@ module ibex_decoder #(
   assign branch_in_id_o    = (deassert_we_i) ? 1'b0          : branch_in_id;
   assign eFPGA_int_en_o    = (deassert_we_i) ? 1'b0          : eFPGA_int_en;
 
+ // assign cx signals
+ assign cx_func_o = instr_rdata_i[31:7];
+ assign cx_insn_o = instr_rdata_i;
 
 
 
