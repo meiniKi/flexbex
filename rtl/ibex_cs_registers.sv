@@ -74,6 +74,15 @@ module ibex_cs_registers #(
     input  exc_cause_e csr_cause_i,
     input  logic                     csr_save_cause_i,
 
+    // cx
+    input logic                      cx_ci,
+    input logic                      cx_si,
+    input logic                      cx_of,
+    input logic                      cx_fi,
+    input logic                      cx_op,
+    input logic                      cx_cu,
+    output logic [7:0]               cx_state_id,
+    output logic [7:0]               cx_cxu_id,
 
     // Performance Counters
     input  logic                     if_valid_i,        // IF stage gives a new instruction
@@ -189,6 +198,13 @@ module ibex_cs_registers #(
   Status_t mstatus_q, mstatus_n;
   logic [31:0] exception_pc;
 
+  // CX
+  logic [7:0] cx_state_id_q, cx_state_id_n;
+  logic [7:0] cx_cxu_id_q, cx_cxu_id_n;
+
+  assign cx_state_id = cx_state_id_q;
+  assign cx_cxu_id   = cx_cxu_id_q;
+
   /////////////
   // CSR reg //
   /////////////
@@ -220,6 +236,10 @@ module ibex_cs_registers #(
 
       // misa
       CSR_MISA: csr_rdata_int = MISA_VALUE;
+
+      // cx (read back possible to ease debugging)
+      CSR_MCX_SEL: csr_rdata_int = {8'b0, cx_state_id_r, 8'b0, cx_cxu_id_r};
+      CSR_CX_STAT: csr_rdata_int = {26'b0, cx_ci, cx_si, cx_of, cx_fi, cx_op, cx_cu};
 
       CSR_DCSR: csr_rdata_int = dcsr_q;
       CSR_DPC: csr_rdata_int = depc_q;
@@ -288,6 +308,12 @@ module ibex_cs_registers #(
         if (csr_we_int)
         begin
           dscratch1_n = csr_wdata_int;
+        end
+      CSR_MCX_SEL:
+      if (csr_we_int)
+        begin
+          cx_state_id_n = csr_wdata_int[23:16];
+          cx_cxu_id_n   = csr_wdata_int[7:0];  
         end
       default: ;
     endcase
@@ -396,6 +422,9 @@ module ibex_cs_registers #(
       dcsr_q     <= dcsr_n    ;
       dscratch0_q<= dscratch0_n;
       dscratch1_q<= dscratch1_n;
+
+      cx_cxu_id_q   <= cx_cxu_id_n;
+      cx_state_id_q <= cx_state_id_n; 
     end
   end
 

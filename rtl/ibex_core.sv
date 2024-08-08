@@ -76,6 +76,18 @@ module ibex_core #(
     // Debug Interface
     input  logic        debug_req_i,
 
+    // CX Interface: ignore unused signals
+    // to let it optimze by the synthesizer
+    input logic         cx_ci,
+    input logic         cx_si,
+    input logic         cx_of,
+    input logic         cx_fi,
+    input logic         cx_op,
+    input logic         cx_cu,
+
+    output logic [7:0]  cx_state_id,
+    output logic [7:0]  cx_cxu_id,
+
     // CPU Control Signals
     input  logic        fetch_enable_i,
 
@@ -541,6 +553,14 @@ module ibex_core #(
       .csr_cause_i             ( csr_cause          ),
       .csr_save_cause_i        ( csr_save_cause     ),
 
+      .cx_ci                   ( cx_ci               ),
+      .cx_si                   ( cx_si               ),
+      .cx_of                   ( cx_of               ),
+      .cx_fi                   ( cx_fi               ),
+      .cx_op                   ( cx_op               ),
+      .cx_cu                   ( cx_cu               ),
+      .cx_state_id             ( cx_state_id         ),
+      .cx_cxu_id               ( cx_cxu_id           ),
 
       // performance counter related signals
       .if_valid_i              ( if_valid           ),
