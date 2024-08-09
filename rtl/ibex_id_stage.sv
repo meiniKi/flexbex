@@ -233,8 +233,8 @@ module ibex_id_stage #(
   logic        eFPGA_int_en;
   logic [1:0]  cx_optype;
   logic [3:0]  eFPGA_delay;
-  logic [25:0] cx_func;
-  logic [31:0] cx_insn;
+  logic [24:0] cx_func_d, cx_func_q;
+  logic [31:0] cx_insn_d, cx_insn_q;
 
   assign eFPGA_en_o = eFPGA_int_en;
 
@@ -431,15 +431,25 @@ module ibex_id_stage #(
       .cx_optype_o                (cx_optype           ),
       .eFPGA_int_en_o                  (eFPGA_int_en),
       .eFPGA_delay_o                   (eFPGA_delay)
-      .cx_func_o                  (cx_func)
-      .cx_insn_o                  (cx_insn)
+      .cx_func_o                  (cx_func_d)
+      .cx_insn_o                  (cx_insn_d)
   );
 
 
   assign cx_optype_o = cx_optype;
   assign eFPGA_delay_o = eFPGA_delay;
-  assign cx_func_o = cx_func;
-  assign cx_insn_o = cx_insn;
+
+  always_ff @(posedge clk, negedge rst_n) begin
+    if (!rst_n) begin
+      cx_func_d <= 25'b0;
+      cx_insn_d <= 32'b0;
+    end else begin
+      cx_func_d <= cx_func_q;
+      cx_insn_d <= cx_insn_q;
+    end
+  end
+  assign cx_func_o = cx_func_q;
+  assign cx_insn_o = cx_insn_q;
 
   ////////////////
   // Controller //
