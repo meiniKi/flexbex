@@ -181,8 +181,6 @@ logic eFPGA_ready;
         .ready_o            ( eFPGA_ready           ), //should be 0 when working - Drives ex_ready_o to ID Stage
         .endresult_o           ( eFPGA_result          ),
         .result_a_i         ( eFPGA_result_a_i      ),
-        .result_b_i         ( eFPGA_result_b_i      ),
-        .result_c_i         ( eFPGA_result_c_i      ),
         .delay_i            ( eFPGA_delay_i         )
     );
 
