@@ -588,6 +588,8 @@ module ibex_decoder #(
  // assign cx signals
  assign cx_func_o = instr_rdata_i[31:7];
  assign cx_insn_o = instr_rdata_i;
+ // TODO: remove this signal, just tying to zero in a hurry!
+ assign eFPGA_delay_o = 4'b0000;
 
 
 
