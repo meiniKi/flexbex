@@ -378,12 +378,12 @@ module ibex_cs_registers #(
           cx_virt_state_id_n = csr_wdata_int[24:8];
         end
       CSR_CX_STAT:
-      if (csr_we_int & (csr_wdata_int == 'b0))
+      if (csr_we_int)
         begin
-          cx_ci_n = '0;
-          cx_si_n = '0;
-          cx_fi_n = '0;
-          cx_op_n = '0;
+          cx_ci_n = csr_wdata_int[1];
+          cx_si_n = csr_wdata_int[2];
+          cx_fi_n = csr_wdata_int[4];
+          cx_op_n = csr_wdata_int[5];
         end
       CSR_MCX_EN:
       if (csr_we_int)
