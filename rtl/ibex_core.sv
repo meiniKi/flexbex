@@ -231,7 +231,7 @@ module ibex_core #(
 
   assign cx_func_o = cx_func;
   assign cx_insn_o = cx_insn;
-
+  assign cx_req_valid = eFPGA_en;
 
   //////////////////////
   // Clock management //

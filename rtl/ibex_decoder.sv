@@ -460,11 +460,12 @@ module ibex_decoder #(
         regfile_we                =   instr_rdata_i[12];
         alu_op_b_mux_sel_o  = OP_B_IMM;
         imm_b_mux_sel_o     = IMM_B_I;
-
+        eFPGA_int_en              =   1'b1;
       end
       OPCODE_CX_FLEX: begin
         // Inhibit regfile writeback according to CX spec
         regfile_we                =   instr_rdata_i[12];
+        eFPGA_int_en              =   1'b1;
       end
       /////////////
       // Special //

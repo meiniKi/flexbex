@@ -177,6 +177,7 @@ module ibex_id_stage #(
   logic        multdiv_stall;
   logic        branch_stall;
   logic        jump_stall;
+  // TODO: investigate this signal!
   logic        eFPGA_stall;
 
   logic        halt_id;
@@ -230,13 +231,21 @@ module ibex_id_stage #(
 
   //eFPGA Control
   logic        eFPGA_en;
-  logic        eFPGA_int_en;
+  logic        eFPGA_int_en_q, eFPGA_int_en_d;
   logic [1:0]  cx_optype;
   logic [3:0]  eFPGA_delay;
   logic [24:0] cx_func_d, cx_func_q;
   logic [31:0] cx_insn_d, cx_insn_q;
 
-  assign eFPGA_en_o = eFPGA_int_en;
+  always @ (posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+      eFPGA_int_en_q <= 1'b0;
+    end else begin
+      eFPGA_int_en_q <= eFPGA_int_en_d;
+    end
+  end
+
+  assign eFPGA_en_o = eFPGA_int_en_q;
 
   // Data Memory Control
   logic        data_we_id;
