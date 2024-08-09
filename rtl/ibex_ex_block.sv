@@ -44,6 +44,8 @@ module ibex_ex_block #(
 
     //sFPGA Enable
     input  logic                  eFPGA_en_i,
+    input  logic                  cx_resp_valid_i,
+
     input  logic [1:0]            cx_optype_i,
   //  input  logic [31:0]           eFPGA_operand_a_i,
   //  input  logic [31:0]           eFPGA_operand_b_i,
@@ -170,21 +172,25 @@ module ibex_ex_block #(
   ////////////////
 logic eFPGA_ready;
 
+    // This previously handled delaying until eFPGA was done - now we just rely on CX signals
+    // ibex_eFPGA eFPGA_i (
+    //     .clk                ( clk                   ),
+    //     .rst_n              ( rst_n                 ),
+    //     .en_i               ( eFPGA_en_i             ),
+    //     .operator_i         ( cx_optype_i      ),
+    // //    .operand_a_i        ( eFPGA_operand_a_i     ),
+    // //    .operand_b_i        ( eFPGA_operand_b_i     ),
+    //     .ready_o            ( eFPGA_ready           ), //should be 0 when working - Drives ex_ready_o to ID Stage
+    //     .endresult_o           ( eFPGA_result          ),
+    //     .result_a_i         ( eFPGA_result_a_i      ),
+    //     .delay_i            ( eFPGA_delay_i         )
+    // );
 
-    ibex_eFPGA eFPGA_i (
-        .clk                ( clk                   ),
-        .rst_n              ( rst_n                 ),
-        .en_i               ( eFPGA_en_i             ),
-        .operator_i         ( cx_optype_i      ),
-    //    .operand_a_i        ( eFPGA_operand_a_i     ),
-    //    .operand_b_i        ( eFPGA_operand_b_i     ),
-        .ready_o            ( eFPGA_ready           ), //should be 0 when working - Drives ex_ready_o to ID Stage
-        .endresult_o           ( eFPGA_result          ),
-        .result_a_i         ( eFPGA_result_a_i      ),
-        .delay_i            ( eFPGA_delay_i         )
-    );
-
-
+    // TODO: this is leftover from having to mux results, these signals can be merged
+    assign eFPGA_result = eFPGA_result_a_i;
+    // We know the FPGA is ready to progress as soon as we get a valid response back
+    // Not 100% sure we need to and this with eFPGA_en_i, but I think it's safer
+    assign eFPGA_ready = cx_resp_valid_i && eFPGA_en_i;
 
 
   always_comb begin
