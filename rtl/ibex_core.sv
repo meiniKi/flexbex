@@ -184,6 +184,7 @@ module ibex_core #(
   logic        halt_if;
   logic        id_ready;
   logic        ex_ready;
+  logic        cx_wait;
 
   logic        if_valid;
   logic        id_valid;
@@ -372,7 +373,7 @@ module ibex_core #(
       .halt_if_o                    ( halt_if              ),
 
       .id_ready_o                   ( id_ready             ),
-      .ex_ready_i                   ( ex_ready             ),
+      .ex_ready_i                   ( ex_ready & ~cx_wait  ),
 
       .id_valid_o                   ( id_valid             ),
 
