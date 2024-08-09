@@ -211,16 +211,16 @@ module ibex_cs_registers #(
 
   logic [16:0]  mcx_en_q, mcx_en_n;
 
-  logic [1:0]   cx_cxu_id_q, cx_cxu_n;
-  logic [1:0]   cx_state_id_q, cx_state_n;
-  logic [15:0]  cx_virt_state_id_q, cx_virt_state_n;
+  logic [1:0]   cx_cxu_id_q, cx_cxu_id_n;
+  logic [1:0]   cx_state_id_q, cx_state_id_n;
+  logic [15:0]  cx_virt_state_id_q, cx_virt_state_id_n;
 
   logic [1:0]   mcx_cxu_id_q, mcx_cxu_id_n;
   logic [1:0]   mcx_state_id_q, mcx_state_id_n;
 
-  assign cx_cxu_id        = cx_cxu_q;
-  assign cx_state_id      = cx_state_q;
-  assign cx_virt_state_id = cx_virt_state_q;
+  assign cx_cxu_id        = cx_cxu_id_q;
+  assign cx_state_id      = cx_state_id_q;
+  assign cx_virt_state_id = cx_virt_state_id_q;
 
   assign mcx_cxu_0_id   = mcx_en_q[3:0];
   assign mcx_cxu_1_id   = mcx_en_q[7:4];

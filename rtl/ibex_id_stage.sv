@@ -430,8 +430,8 @@ module ibex_id_stage #(
       //eFPGA_
       .cx_optype_o                (cx_optype           ),
       .eFPGA_int_en_o                  (eFPGA_int_en),
-      .eFPGA_delay_o                   (eFPGA_delay)
-      .cx_func_o                  (cx_func_d)
+      .eFPGA_delay_o                   (eFPGA_delay),
+      .cx_func_o                  (cx_func_d),
       .cx_insn_o                  (cx_insn_d)
   );
 

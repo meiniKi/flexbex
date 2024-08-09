@@ -87,9 +87,9 @@ module ibex_decoder #(
     output logic  [1:0]              cx_optype_o,
     output logic                     eFPGA_int_en_o,
     // TODO: don't need this probably
-    output logic  [3:0]              eFPGA_delay_o
+    output logic  [3:0]              eFPGA_delay_o,
     output logic [24:0]             cx_func_o,
-    output logic [31:0]             cx_insn_o,
+    output logic [31:0]             cx_insn_o
 
 );
 
