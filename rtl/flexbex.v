@@ -2269,8 +2269,6 @@ module ibex_eFPGA (
 						(* full_case, parallel_case *)
 						case (operator_i)
 							2'b00: endresult_o <= result_a_i;
-							2'b01: endresult_o <= result_b_i;
-							2'b10: endresult_o <= result_c_i;
 							default: endresult_o <= result_a_i;
 						endcase
 					end
