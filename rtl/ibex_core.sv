@@ -102,7 +102,7 @@ module ibex_core #(
     // unused, since we're not doing OoO
     output logic [1:0] cx_id_o,
     output logic [31:0] cx_insn_o,
-    output logic [24:0] cx_func_o,
+    output logic [24:0] cx_func_o
 );
 
   import ibex_defines::*;
@@ -583,7 +583,11 @@ module ibex_core #(
       .cx_cxu_id               ( cx_cxu_id          ),
       .cx_state_id             ( cx_state_id        ),
       .cx_virt_state_id        ( cx_virt_state_id   ),
-      .mcx_en                  ( ),                     // TODO
+      .mcx_cxu_0_id            ( ), // TODO
+      .mcx_cxu_1_id            ( ), // TODO
+      .mcx_cxu_2_id            ( ), // TODO
+      .mcx_cxu_3_id            ( ), // TODO
+      .mcx_except_en           ( ), // TODO
 
       // performance counter related signals
       .if_valid_i              ( if_valid           ),

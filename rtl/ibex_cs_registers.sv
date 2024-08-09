@@ -83,7 +83,11 @@ module ibex_cs_registers #(
     output logic [1:0]               cx_cxu_id,
     output logic [1:0]               cx_state_id,
     output logic [15:0]              cx_virt_state_id,
-    output logic [15:0]              mcx_en,
+    output logic [3:0]               mcx_cxu_0_id,
+    output logic [3:0]               mcx_cxu_1_id,
+    output logic [3:0]               mcx_cxu_2_id,
+    output logic [3:0]               mcx_cxu_3_id,
+    output logic                     mcx_except_en,
 
     // Performance Counters
     input  logic                     if_valid_i,        // IF stage gives a new instruction
@@ -205,7 +209,7 @@ module ibex_cs_registers #(
   logic cx_fi_q, cx_fi_n;
   logic cx_op_q, cx_op_n;
 
-  logic [15:0]  mcx_en_q, mcx_en_n;
+  logic [16:0]  mcx_en_q, mcx_en_n;
 
   logic [1:0]   cx_cxu_id_q, cx_cxu_n;
   logic [1:0]   cx_state_id_q, cx_state_n;
@@ -217,7 +221,12 @@ module ibex_cs_registers #(
   assign cx_cxu_id        = cx_cxu_q;
   assign cx_state_id      = cx_state_q;
   assign cx_virt_state_id = cx_virt_state_q;
-  assign mcx_en           = mcx_en_q;
+
+  assign mcx_cxu_0_id   = mcx_en_q[3:0];
+  assign mcx_cxu_1_id   = mcx_en_q[7:4];
+  assign mcx_cxu_2_id   = mcx_en_q[11:8];
+  assign mcx_cxu_3_id   = mcx_en_q[15:12];
+  assign mcx_except_en  = mcx_en_q[16];
 
   /////////////
   // CSR reg //
@@ -255,7 +264,7 @@ module ibex_cs_registers #(
       CSR_CX_IDX:  csr_rdata_int = {8'b0, cx_virt_state_id_q, 2'b0, cx_state_id_q, 2'b0, cx_cxu_id_q};
       // TODO: Reading this CSR waits for all CXUs to complete whatever computation they are doing
       CSR_CX_STAT: csr_rdata_int = {26'b0, cx_op_q, cx_fi_q, 1'b0, cx_ci_q, cx_si_q, 1'b0};
-      CSR_MCX_EN:  csr_rdata_int = {16'b0, mcx_en_q};
+      CSR_MCX_EN:  csr_rdata_int = {mcx_en_q[16], 15'b0, mcx_en_q[15:0]};
       CSR_MCX_IDX: csr_rdata_int = {8'b0, 16'b0, 2'b0, mcx_state_id_q, 2'b0, mcx_cxu_id_q};
 
       CSR_DCSR: csr_rdata_int = dcsr_q;
@@ -379,7 +388,7 @@ module ibex_cs_registers #(
       CSR_MCX_EN:
       if (csr_we_int)
         begin
-          mcx_en_n = csr_wdata_int[15:0];
+          mcx_en_n = {csr_wdata_int[31], csr_wdata_int[15:0]};
         end
       CSR_MCX_IDX:
       if (csr_we_int)
