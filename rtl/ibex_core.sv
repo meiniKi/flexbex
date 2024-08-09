@@ -275,7 +275,7 @@ module ibex_core #(
   //////////////
 
   assign cx_clk = clk_i;
-  assign cx_rst = rst_ni;
+  assign cx_rst = ~rst_ni;
 
   //////////////
   // IF stage //
