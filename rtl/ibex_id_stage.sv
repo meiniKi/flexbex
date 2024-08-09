@@ -438,7 +438,7 @@ module ibex_id_stage #(
 
       //eFPGA_
       .cx_optype_o                (cx_optype           ),
-      .eFPGA_int_en_o                  (eFPGA_int_en),
+      .eFPGA_int_en_o                  (eFPGA_int_en_d),
       .eFPGA_delay_o                   (eFPGA_delay),
       .cx_func_o                  (cx_func_q),
       .cx_insn_o                  (cx_insn_q)
@@ -664,7 +664,7 @@ module ibex_id_stage #(
             multdiv_stall   = 1'b1;
             instr_multicyle = 1'b1;
           end
-          eFPGA_int_en: begin
+          eFPGA_int_en_d: begin
             //MUL or DIV operation
             regfile_we      = 1'b0;
             id_wb_fsm_ns    = WAIT_MULTICYCLE;
@@ -699,7 +699,7 @@ module ibex_id_stage #(
               load_stall    = 1'b1;
             multdiv_int_en:
               multdiv_stall = 1'b1;
-            eFPGA_int_en:
+            eFPGA_int_en_d:
               eFPGA_stall   = 1'b1;
             default:;
           endcase
@@ -736,7 +736,7 @@ module ibex_id_stage #(
 
   // make sure multicycles enable signals are unique
   assert property (
-    @(posedge clk) ~(data_req_ex_o & multdiv_int_en  & eFPGA_int_en)) else
+    @(posedge clk) ~(data_req_ex_o & multdiv_int_en  & eFPGA_int_en_d)) else
       $display("Multicycles enable signals are not unique");
 
 `endif
