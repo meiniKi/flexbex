@@ -2237,8 +2237,6 @@ module ibex_eFPGA (
 	ready_o,
 	endresult_o,
 	result_a_i,
-	result_b_i,
-	result_c_i,
 	delay_i
 );
 	input wire clk;
@@ -2248,8 +2246,6 @@ module ibex_eFPGA (
 	output wire ready_o;
 	output reg [31:0] endresult_o;
 	input wire [31:0] result_a_i;
-	input wire [31:0] result_b_i;
-	input wire [31:0] result_c_i;
 	input wire [3:0] delay_i;
 	reg [1:0] eFPGA_fsm_r;
 	reg [3:0] count;
@@ -2412,8 +2408,6 @@ module ibex_ex_block (
 		end
 	endgenerate
 	wire eFPGA_ready;
-	wire eFPGA_result_b_i;
-	wire eFPGA_result_c_i;
 	ibex_eFPGA eFPGA_i(
 		.clk(clk),
 		.rst_n(rst_n),
@@ -2422,8 +2416,6 @@ module ibex_ex_block (
 		.ready_o(eFPGA_ready),
 		.endresult_o(eFPGA_result),
 		.result_a_i(eFPGA_result_a_i),
-		.result_b_i(eFPGA_result_b_i),
-		.result_c_i(eFPGA_result_c_i),
 		.delay_i(eFPGA_delay_i)
 	);
 	always @(*) begin
