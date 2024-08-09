@@ -2,48 +2,35 @@
 // DESCRIPTION: Verilator output: Design internal header
 // See Vdesign_2_top.h for the primary calling header
 
-#ifndef _VDESIGN_2_TOP_FORTE_SOC_TOP_H_
-#define _VDESIGN_2_TOP_FORTE_SOC_TOP_H_  // guard
+#ifndef VERILATED_VDESIGN_2_TOP_FORTE_SOC_TOP_H_
+#define VERILATED_VDESIGN_2_TOP_FORTE_SOC_TOP_H_  // guard
 
-#include "verilated_heavy.h"
-#include "Vdesign_2_top__Dpi.h"
-
-//==========
-
-class Vdesign_2_top__Syms;
-class Vdesign_2_top_VerilatedVcd;
+#include "verilated.h"
 class Vdesign_2_top_ram;
 
 
-//----------
+class Vdesign_2_top__Syms;
 
-VL_MODULE(Vdesign_2_top_forte_soc_top) {
+class alignas(VL_CACHE_LINE_BYTES) Vdesign_2_top_forte_soc_top final : public VerilatedModule {
   public:
     // CELLS
     Vdesign_2_top_ram* ram_0;
-    
-    // PORTS
-    VL_IN8(__PVT__clk_i,0,0);
-    VL_IN8(__PVT__reset,0,0);
-    VL_IN8(__PVT__debug_req_i,0,0);
-    VL_IN8(__PVT__fetch_enable_i,0,0);
-    VL_OUT8(__PVT__irq_ack_o,0,0);
-    VL_IN8(__PVT__irq_i,0,0);
-    VL_IN8(__PVT__irq_id_i,4,0);
-    VL_OUT8(__PVT__irq_id_o,4,0);
-    VL_IN8(__PVT__rx_i,0,0);
-    VL_OUT8(__PVT__tx_o,0,0);
-    VL_OUT8(__PVT__uart_recv_error,0,0);
-    VL_OUT(__PVT__eFPGA_operand_a_o,31,0);
-    VL_OUT(__PVT__eFPGA_operand_b_o,31,0);
-    VL_IN(__PVT__eFPGA_result_a_i,31,0);
-    VL_IN(__PVT__eFPGA_result_b_i,31,0);
-    VL_IN(__PVT__eFPGA_result_c_i,31,0);
-    
-    // LOCAL SIGNALS
+
+    // DESIGN SPECIFIC STATE
     // Anonymous structures to workaround compiler member-count bugs
     struct {
+        VL_IN8(__PVT__clk_i,0,0);
+        VL_IN8(__PVT__reset,0,0);
         CData/*0:0*/ __PVT__ibex_core_i__DOT__clk;
+        VL_IN8(__PVT__debug_req_i,0,0);
+        VL_IN8(__PVT__fetch_enable_i,0,0);
+        VL_OUT8(__PVT__irq_ack_o,0,0);
+        VL_IN8(__PVT__irq_i,0,0);
+        VL_IN8(__PVT__irq_id_i,4,0);
+        VL_OUT8(__PVT__irq_id_o,4,0);
+        VL_IN8(__PVT__rx_i,0,0);
+        VL_OUT8(__PVT__tx_o,0,0);
+        VL_OUT8(__PVT__uart_recv_error,0,0);
         CData/*0:0*/ __PVT__ibex_core_w_0_data_req_o;
         CData/*0:0*/ __PVT__ibex_core_w_0_instr_req_o;
         CData/*0:0*/ __PVT__uart_to_mem_w_0_data_req_o;
@@ -70,6 +57,11 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*5:0*/ __PVT__uart_to_mem_i__DOT__uart_i__DOT__tx_countdown;
         CData/*3:0*/ __PVT__uart_to_mem_i__DOT__uart_i__DOT__tx_bits_remaining;
         CData/*7:0*/ __PVT__uart_to_mem_i__DOT__uart_i__DOT__tx_data;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cx_req_valid;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cx_resp_valid;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cx_resp_state;
+        CData/*3:0*/ __PVT__ibex_core_i__DOT__cx_resp_status;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__cx_id_o;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__instr_valid_id;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__is_compressed_id;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__illegal_c_insn_id;
@@ -82,11 +74,17 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*0:0*/ __PVT__ibex_core_i__DOT__ctrl_busy;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__core_ctrl_firstfetch;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__core_busy_q;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__mult_en_ex;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__div_en_ex;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__csr_op_ex;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__data_req_ex;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__halt_if;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_ready;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__ex_ready;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__if_valid;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__data_valid_lsu;
+    };
+    struct {
         CData/*0:0*/ __PVT__ibex_core_i__DOT__instr_req_int;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__csr_save_cause;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__csr_save_if;
@@ -99,6 +97,8 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*0:0*/ __PVT__ibex_core_i__DOT__perf_jump;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__perf_branch;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__perf_tbranch;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__eFPGA_en;
+        CData/*0:0*/ ibex_core_i__DOT____VdfgRegularize_h5e220eac_1_0;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__core_clock_gate_i__DOT__clk_en;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__offset_in_init_d;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__offset_in_init_q;
@@ -107,8 +107,6 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*0:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__fetch_valid;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__fetch_ready;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__illegal_c_insn;
-    };
-    struct {
         CData/*1:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__CS;
         CData/*1:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__NS;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__addr_valid;
@@ -117,6 +115,7 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*2:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__valid_int;
         CData/*2:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__valid_Q;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__valid;
+        CData/*0:0*/ ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT____Vlvbound_h2de484eb__0;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__deassert_we;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__illegal_insn_dec;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__ebrk_insn;
@@ -148,19 +147,17 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__alu_op_b_mux_sel;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__imm_a_mux_sel;
         CData/*2:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__imm_b_mux_sel;
-        CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__mult_int_en;
-        CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__div_int_en;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__multdiv_int_en;
         CData/*1:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__multdiv_operator;
+    };
+    struct {
         CData/*1:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__multdiv_signed_mode;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__eFPGA_en;
-        CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__eFPGA_int_en;
-        CData/*1:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__eFPGA_operator;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__cx_optype;
         CData/*3:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__eFPGA_delay;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__data_we_id;
         CData/*1:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__data_type_id;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__data_sign_ext_id;
-        CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__data_req_id;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__csr_access;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__csr_status;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__id_wb_fsm_cs;
@@ -173,8 +170,6 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__decoder_i__DOT__jump_in_id;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__decoder_i__DOT__eFPGA_int_en;
         CData/*1:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__decoder_i__DOT__csr_op;
-    };
-    struct {
         CData/*0:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__decoder_i__DOT__csr_illegal;
         CData/*6:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__decoder_i__DOT__opcode;
         CData/*3:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__controller_i__DOT__ctrl_fsm_cs;
@@ -186,6 +181,8 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*1:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__int_controller_i__DOT__exc_ctrl_cs;
         CData/*4:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__int_controller_i__DOT__irq_id_d;
         CData/*4:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__int_controller_i__DOT__irq_id_q;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__eFPGA_result_b_i;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__eFPGA_result_c_i;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__alu_i__DOT__adder_op_b_negate;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__alu_i__DOT__cmp_signed;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__alu_i__DOT__cmp_result;
@@ -218,6 +215,8 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*4:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__pccr_index;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__pccr_all_sel;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__is_pccr;
+    };
+    struct {
         CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__is_pcer;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__is_pcmr;
         CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__csr_we_int;
@@ -225,6 +224,26 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         CData/*5:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__mcause_n;
         CData/*3:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__mstatus_q;
         CData/*3:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__mstatus_n;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_ci_q;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_ci_n;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_si_q;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_si_n;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_fi_q;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_fi_n;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_op_q;
+        CData/*0:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_op_n;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_cxu_id_q;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_cxu_id_n;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_state_id_q;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_state_id_n;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__mcx_cxu_id_q;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__mcx_cxu_id_n;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__mcx_state_id_q;
+        CData/*1:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__mcx_state_id_n;
+        CData/*0:0*/ ibex_core_i__DOT__cs_registers_i__DOT____Vlvbound_h4c874889__0;
+        CData/*0:0*/ __Vdly__uart_to_mem_i__DOT__read_issued;
+        CData/*0:0*/ __Vdly__uart_to_mem_w_0_data_req_o;
+        CData/*0:0*/ __Vdly__uart_to_mem_i__DOT__read_complete;
         SData/*11:0*/ __PVT__uart_to_mem_i__DOT__MEMORY_ADDRESS;
         SData/*15:0*/ __PVT__uart_to_mem_i__DOT__baud_i;
         SData/*10:0*/ __PVT__uart_to_mem_i__DOT__uart_i__DOT__rx_clk_divider;
@@ -232,46 +251,54 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         SData/*11:0*/ __PVT__ibex_core_i__DOT__csr_addr;
         SData/*15:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__gen_multdiv_fast__DOT__multdiv_i__DOT__mult_op_a;
         SData/*15:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__gen_multdiv_fast__DOT__multdiv_i__DOT__mult_op_b;
-        SData/*11:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__PCCR_in;
         SData/*11:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__PCCR_inc;
         SData/*11:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__PCCR_inc_q;
         SData/*11:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__PCER_n;
         SData/*11:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__PCER_q;
+        SData/*15:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_virt_state_id_q;
+        SData/*15:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__cx_virt_state_id_n;
+        VL_OUT(__PVT__eFPGA_operand_a_o,31,0);
+        VL_OUT(__PVT__eFPGA_operand_b_o,31,0);
+        VL_IN(__PVT__eFPGA_result_a_i,31,0);
+        VL_IN(__PVT__eFPGA_result_b_i,31,0);
+        VL_IN(__PVT__eFPGA_result_c_i,31,0);
         IData/*31:0*/ __PVT__ibex_core_w_0_instr_addr_o;
         IData/*31:0*/ __PVT__uart_to_mem_i__DOT__DATA;
-    };
-    struct {
         IData/*31:0*/ __PVT__uart_to_mem_i__DOT__DATA_READ;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__instr_rdata_id;
+        IData/*31:0*/ __PVT__ibex_core_i__DOT__pc_if;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__pc_id;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__misaligned_addr;
+        IData/*31:0*/ __PVT__ibex_core_i__DOT__alu_operand_b_ex;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__csr_rdata;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__fetch_addr_n;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__fetch_rdata;
-        IData/*31:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__fetch_addr;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__exc_pc;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__instr_decompressed;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__instr_addr_q;
-        WData/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__addr_n[3];
-        WData/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__addr_int[3];
-        WData/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__addr_Q[3];
-        WData/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__rdata_n[3];
-        WData/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__rdata_int[3];
-        WData/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__rdata_Q[3];
+        VlWide<3>/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__addr_n;
+        VlWide<3>/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__addr_int;
+        VlWide<3>/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__addr_Q;
+        VlWide<3>/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__rdata_n;
+        VlWide<3>/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__rdata_int;
+    };
+    struct {
+        VlWide<3>/*95:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__rdata_Q;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__rdata;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT__unnamedblk1__DOT__j;
+        IData/*31:0*/ ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT____Vlvbound_h59c52c66__0;
+        IData/*31:0*/ ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT____Vlvbound_h85cb1790__0;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__imm_i_type;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__imm_b;
-        IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__regfile_data_ra_id;
-        IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__regfile_data_rb_id;
+        IData/*24:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__cx_func_d;
+        IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__cx_insn_d;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__operand_a_fw_id;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__alu_operand_a;
-        IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__alu_operand_b;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__regfile_wdata_mux;
-        WData/*1023:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__registers_i__DOT__rf_reg[32];
-        WData/*991:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__registers_i__DOT__rf_reg_tmp[31];
+        VlWide<31>/*991:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__registers_i__DOT__rf_reg_tmp;
         IData/*30:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__registers_i__DOT__we_a_dec;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__id_stage_i__DOT__registers_i__DOT__unnamedblk2__DOT__r;
+        IData/*31:0*/ ibex_core_i__DOT__id_stage_i__DOT__registers_i__DOT____Vlvbound_h84ee3627__0;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__alu_result;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__eFPGA_result;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__alu_i__DOT__operand_a_rev;
@@ -303,10 +330,11 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         IData/*31:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__dscratch1_q;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__dscratch1_n;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__exception_pc;
+        IData/*16:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__mcx_en_q;
+        IData/*16:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__mcx_en_n;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__unnamedblk2__DOT__r;
         IData/*31:0*/ __PVT__ibex_core_i__DOT__cs_registers_i__DOT__unnamedblk1__DOT__r;
-    };
-    struct {
+        IData/*31:0*/ __Vdly__uart_to_mem_i__DOT__DATA_READ;
         QData/*32:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__multdiv_alu_operand_b;
         QData/*32:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__multdiv_alu_operand_a;
         QData/*33:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__alu_adder_result_ext;
@@ -317,78 +345,18 @@ VL_MODULE(Vdesign_2_top_forte_soc_top) {
         QData/*33:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__gen_multdiv_fast__DOT__multdiv_i__DOT__accum;
         QData/*32:0*/ __PVT__ibex_core_i__DOT__ex_block_i__DOT__gen_multdiv_fast__DOT__multdiv_i__DOT__next_quotient;
     };
-    
-    // LOCAL VARIABLES
-    CData/*0:0*/ ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT____Vlvbound3;
-    CData/*1:0*/ ibex_core_i__DOT__id_stage_i__DOT____Vcellout__decoder_i__csr_op_o;
-    CData/*0:0*/ ibex_core_i__DOT__id_stage_i__DOT__registers_i__DOT____Vlvbound1;
-    CData/*0:0*/ ibex_core_i__DOT__cs_registers_i__DOT____Vlvbound1;
-    CData/*4:0*/ __Vtableidx2;
-    CData/*4:0*/ __Vtableidx3;
-    CData/*4:0*/ __Vtableidx4;
-    CData/*6:0*/ __Vtableidx5;
-    CData/*7:0*/ __Vtableidx6;
-    CData/*0:0*/ __Vdly__uart_to_mem_i__DOT__read_issued;
-    CData/*0:0*/ __Vdly__uart_to_mem_w_0_data_req_o;
-    CData/*0:0*/ __Vdly__uart_to_mem_i__DOT__read_complete;
-    SData/*8:0*/ __Vtableidx1;
-    IData/*31:0*/ ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT____Vlvbound1;
-    IData/*31:0*/ ibex_core_i__DOT__if_stage_i__DOT__prefetch_buffer_i__DOT__fifo_i__DOT____Vlvbound2;
-    IData/*31:0*/ ibex_core_i__DOT__id_stage_i__DOT__registers_i__DOT____Vlvbound2;
-    IData/*31:0*/ __Vdly__uart_to_mem_i__DOT__DATA_READ;
-    static IData/*31:0*/ __Vtable1___PVT__ibex_core_i__DOT__if_stage_i__DOT__exc_pc[512];
-    static CData/*0:0*/ __Vtable2___PVT__ibex_core_i__DOT__if_stage_i__DOT__offset_in_init_d[32];
-    static CData/*0:0*/ __Vtable2___PVT__ibex_core_i__DOT__if_stage_i__DOT__fetch_ready[32];
-    static CData/*0:0*/ __Vtable2___PVT__ibex_core_i__DOT__if_stage_i__DOT__branch_req[32];
-    static CData/*0:0*/ __Vtable2___PVT__ibex_core_i__DOT__if_stage_i__DOT__valid[32];
-    static CData/*0:0*/ __Vtable3___PVT__ibex_core_i__DOT__ex_block_i__DOT__alu_i__DOT__adder_op_b_negate[32];
-    static CData/*0:0*/ __Vtable4___PVT__ibex_core_i__DOT__ex_block_i__DOT__alu_i__DOT__cmp_signed[32];
-    static CData/*0:0*/ __Vtable5___PVT__ibex_core_i__DOT__ex_block_i__DOT__alu_i__DOT__cmp_result[128];
-    static CData/*2:0*/ __Vtable6___PVT__ibex_core_i__DOT__load_store_unit_i__DOT__NS[256];
-    static CData/*0:0*/ __Vtable6___PVT__ibex_core_w_0_data_req_o[256];
-    static CData/*0:0*/ __Vtable6___PVT__ibex_core_i__DOT__load_store_unit_i__DOT__lsu_update_addr_o[256];
-    static CData/*0:0*/ __Vtable6___PVT__ibex_core_i__DOT__data_valid_lsu[256];
-    static CData/*0:0*/ __Vtable6___PVT__ibex_core_i__DOT__load_store_unit_i__DOT__increase_address[256];
-    static CData/*0:0*/ __Vtable6___PVT__ibex_core_i__DOT__data_misaligned[256];
-    
-    // INTERNAL VARIABLES
-  private:
-    Vdesign_2_top__Syms* __VlSymsp;  // Symbol table
-  public:
-    
-    // CONSTRUCTORS
-  private:
-    VL_UNCOPYABLE(Vdesign_2_top_forte_soc_top);  ///< Copying not allowed
-  public:
-    Vdesign_2_top_forte_soc_top(const char* name = "TOP");
-    ~Vdesign_2_top_forte_soc_top();
-    
-    // INTERNAL METHODS
-    void __Vconfigure(Vdesign_2_top__Syms* symsp, bool first);
-    static void _combo__TOP__design_2_top__forte_soc_top_i__13(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _combo__TOP__design_2_top__forte_soc_top_i__16(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _combo__TOP__design_2_top__forte_soc_top_i__3(Vdesign_2_top__Syms* __restrict vlSymsp);
-  private:
-    void _ctor_var_reset() VL_ATTR_COLD;
-  public:
-    static void _initial__TOP__design_2_top__forte_soc_top_i__6(Vdesign_2_top__Syms* __restrict vlSymsp) VL_ATTR_COLD;
-    static void _multiclk__TOP__design_2_top__forte_soc_top_i__12(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _multiclk__TOP__design_2_top__forte_soc_top_i__15(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__design_2_top__forte_soc_top_i__10(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__design_2_top__forte_soc_top_i__11(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__design_2_top__forte_soc_top_i__14(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__design_2_top__forte_soc_top_i__4(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__design_2_top__forte_soc_top_i__5(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__design_2_top__forte_soc_top_i__7(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__design_2_top__forte_soc_top_i__8(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__design_2_top__forte_soc_top_i__9(Vdesign_2_top__Syms* __restrict vlSymsp);
-    static void _settle__TOP__design_2_top__forte_soc_top_i__1(Vdesign_2_top__Syms* __restrict vlSymsp) VL_ATTR_COLD;
-    static void _settle__TOP__design_2_top__forte_soc_top_i__2(Vdesign_2_top__Syms* __restrict vlSymsp) VL_ATTR_COLD;
-  private:
-    static void traceInit(void* userp, VerilatedVcd* tracep, uint32_t code) VL_ATTR_COLD;
-} VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
 
-//----------
+    // INTERNAL VARIABLES
+    Vdesign_2_top__Syms* const vlSymsp;
+
+    // CONSTRUCTORS
+    Vdesign_2_top_forte_soc_top(Vdesign_2_top__Syms* symsp, const char* v__name);
+    ~Vdesign_2_top_forte_soc_top();
+    VL_UNCOPYABLE(Vdesign_2_top_forte_soc_top);
+
+    // INTERNAL METHODS
+    void __Vconfigure(bool first);
+};
 
 
 #endif  // guard

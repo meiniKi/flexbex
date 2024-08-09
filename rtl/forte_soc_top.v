@@ -115,11 +115,9 @@ parameter ADDR_WIDTH = 12)
           .irq_id_o(irq_id_o),
           .rst_ni(reset_ni),
           .test_en_i(1'b1),
-          .eFPGA_operand_a_o(eFPGA_operand_a_o),
-          .eFPGA_operand_b_o(eFPGA_operand_b_o),
-          .eFPGA_result_a_i(eFPGA_result_a_i),
-          .eFPGA_result_b_i(eFPGA_result_b_i),
-          .eFPGA_result_c_i(eFPGA_result_c_i));
+          .cx_req_data0(eFPGA_operand_a_o),
+          .cx_req_data1(eFPGA_operand_b_o),
+          .cx_resp_data(eFPGA_result_a_i));
 
 
 
