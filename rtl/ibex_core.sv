@@ -184,7 +184,7 @@ module ibex_core #(
   logic        halt_if;
   logic        id_ready;
   logic        ex_ready;
-  logic        cx_wait;
+  logic        cx_active_q, cx_active_n;
 
   logic        if_valid;
   logic        id_valid;
@@ -230,9 +230,20 @@ module ibex_core #(
   // CX vals          //
   //////////////////////
 
+  assign cx_active_n =
+    cx_req_valid |                  // new CX cust insn fired off
+    (cx_active_q & ~cx_resp_valid); // CX cust insn still running
+
+  always_ff @(posedge clk_i, negedge rst_ni) begin
+    if (!rst_ni) begin
+      cx_active_q <= 1'b0;
+    end else begin
+      cx_active_q <= cx_active_n;
+    end
+  end
+
   assign cx_func_o = cx_func;
   assign cx_insn_o = cx_insn;
-
 
   //////////////////////
   // Clock management //
@@ -373,7 +384,7 @@ module ibex_core #(
       .halt_if_o                    ( halt_if              ),
 
       .id_ready_o                   ( id_ready             ),
-      .ex_ready_i                   ( ex_ready & ~cx_wait  ),
+      .ex_ready_i                   ( ex_ready & ~cx_active_n  ),
 
       .id_valid_o                   ( id_valid             ),
 
