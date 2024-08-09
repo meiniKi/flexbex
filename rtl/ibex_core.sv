@@ -89,10 +89,8 @@ module ibex_core #(
     output logic [31:0] cx_req_data1,
 
     input  logic        cx_resp_valid,
-    input  logic        cx_resp_ci,
-    input  logic        cx_resp_si,
-    input  logic        cx_resp_fi,
-    input  logic        cx_resp_op,
+    input  logic        cx_resp_state,
+    input  logic [3:0]  cx_resp_status,
     input  logic [31:0] cx_resp_data,
 
     output logic [15:0] cx_virt_state_id,
@@ -578,10 +576,10 @@ module ibex_core #(
       .csr_save_cause_i        ( csr_save_cause     ),
 
       .cx_resp_valid           ( cx_resp_valid      ),
-      .cx_ci                   ( cx_resp_ci         ),
-      .cx_si                   ( cx_resp_si         ),
-      .cx_fi                   ( cx_resp_fi         ),
-      .cx_op                   ( cx_resp_op         ),
+      .cx_ci                   ( cx_resp_status[0]  ),
+      .cx_si                   ( cx_resp_status[1]  ),
+      .cx_fi                   ( cx_resp_status[2]  ),
+      .cx_op                   ( cx_resp_status[3]  ),
       .cx_cxu_id               ( cx_cxu_id          ),
       .cx_state_id             ( cx_state_id        ),
       .cx_virt_state_id        ( cx_virt_state_id   ),
