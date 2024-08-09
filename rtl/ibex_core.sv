@@ -82,6 +82,7 @@ module ibex_core #(
     output logic        cx_clk,
     output logic        cx_rst,
     output logic        cx_req_valid,
+    input  logic        cx_req_ready, 
     output logic [1:0]  cx_cxu_id,
     output logic [1:0]  cx_state_id,
     //output logic []     cx_req_func,    // ??
@@ -89,6 +90,7 @@ module ibex_core #(
     output logic [31:0] cx_req_data1,
 
     input  logic        cx_resp_valid,
+    output logic        cx_resp_ready, 
     input  logic        cx_resp_state,
     input  logic [3:0]  cx_resp_status,
     input  logic [31:0] cx_resp_data,
@@ -230,9 +232,17 @@ module ibex_core #(
   // CX vals          //
   //////////////////////
 
-  assign cx_active_n =
-    cx_req_valid |                  // new CX cust insn fired off
-    (cx_active_q & ~cx_resp_valid); // CX cust insn still running
+  // We stall the processor. Thus, we can accept the
+  // response right away.
+  assign cx_resp_ready = 1'b1;
+
+  always_comb begin
+    cx_active_n = cx_active_q;
+    if (cx_resp_valid & cx_resp_ready)
+      cx_active_n = 1'b0;
+    if (cx_req_valid & cx_req_ready)
+      cx_active_n = 1'b1;
+  end
 
   always_ff @(posedge clk_i, negedge rst_ni) begin
     if (!rst_ni) begin
