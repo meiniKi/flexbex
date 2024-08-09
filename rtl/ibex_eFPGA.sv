@@ -13,8 +13,6 @@ module ibex_eFPGA  (
     output logic          ready_o, //should be 0 when working - Drives ex_ready_o to ID Stage
     output reg [31:0]     endresult_o,
     input  logic [31:0]           result_a_i,
-    input  logic [31:0]           result_b_i,
-    input  logic [31:0]           result_c_i,
     input  logic [3:0]            delay_i
 );
 
@@ -47,12 +45,6 @@ always_ff @(posedge clk) begin
               unique case (operator_i)
                 2'b00: begin
                   endresult_o <= result_a_i;
-                end
-                2'b01: begin
-                  endresult_o <= result_b_i;
-                end
-                2'b10: begin
-                  endresult_o <= result_c_i;
                 end
                 default: begin
                   endresult_o <= result_a_i;
