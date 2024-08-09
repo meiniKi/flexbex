@@ -82,7 +82,7 @@ module ibex_cs_registers #(
     input  logic                     cx_op,
     output logic [1:0]               cx_cxu_id,
     output logic [1:0]               cx_state_id,
-    output logic [15:0]              cx_virt_state_id,
+    output logic [1:0]               cx_virt_state_id,
     output logic [3:0]               mcx_cxu_0_id,
     output logic [3:0]               mcx_cxu_1_id,
     output logic [3:0]               mcx_cxu_2_id,
@@ -211,12 +211,12 @@ module ibex_cs_registers #(
 
   logic [16:0]  mcx_en_q, mcx_en_n;
 
-  logic [1:0]   cx_cxu_id_q, cx_cxu_id_n;
-  logic [1:0]   cx_state_id_q, cx_state_id_n;
-  logic [15:0]  cx_virt_state_id_q, cx_virt_state_id_n;
+  logic [1:0] cx_cxu_id_q, cx_cxu_id_n;
+  logic [1:0] cx_state_id_q, cx_state_id_n;
+  logic [1:0] cx_virt_state_id_q, cx_virt_state_id_n;
 
-  logic [1:0]   mcx_cxu_id_q, mcx_cxu_id_n;
-  logic [1:0]   mcx_state_id_q, mcx_state_id_n;
+  logic [1:0] mcx_cxu_id_q, mcx_cxu_id_n;
+  logic [1:0] mcx_state_id_q, mcx_state_id_n;
 
   assign cx_cxu_id        = cx_cxu_id_q;
   assign cx_state_id      = cx_state_id_q;
@@ -261,7 +261,7 @@ module ibex_cs_registers #(
       CSR_MISA: csr_rdata_int = MISA_VALUE;
 
       // cx (read back possible to ease debugging)
-      CSR_CX_IDX:  csr_rdata_int = {8'b0, cx_virt_state_id_q, 2'b0, cx_state_id_q, 2'b0, cx_cxu_id_q};
+      CSR_CX_IDX:  csr_rdata_int = {22'b0, cx_virt_state_id_q, 2'b0, cx_state_id_q, 2'b0, cx_cxu_id_q};
       // TODO: Reading this CSR waits for all CXUs to complete whatever computation they are doing
       CSR_CX_STAT: csr_rdata_int = {26'b0, cx_op_q, cx_fi_q, 1'b0, cx_ci_q, cx_si_q, 1'b0};
       CSR_MCX_EN:  csr_rdata_int = {mcx_en_q[16], 15'b0, mcx_en_q[15:0]};
@@ -375,7 +375,7 @@ module ibex_cs_registers #(
         begin
           cx_cxu_id_n        = csr_wdata_int[1:0];
           cx_state_id_n      = csr_wdata_int[5:4];
-          cx_virt_state_id_n = csr_wdata_int[24:8];
+          cx_virt_state_id_n = csr_wdata_int[9:8];
         end
       CSR_CX_STAT:
       if (csr_we_int)

@@ -93,7 +93,7 @@ module ibex_core #(
     input  logic [3:0]  cx_resp_status,
     input  logic [31:0] cx_resp_data,
 
-    output logic [15:0] cx_virt_state_id,
+    output logic [1:0]  cx_virt_state_id,
 
     // CPU Control Signals
     input  logic        fetch_enable_i,
