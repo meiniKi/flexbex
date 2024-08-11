@@ -471,7 +471,8 @@ module ibex_core #(
       .regfile_wdata_ex_o         ( regfile_wdata_ex      ),
 
       .eFPGA_en_i                 (eFPGA_en               ),
-      .cx_optype_i           (cx_optype         ),
+      .cx_optype_i                (cx_optype),
+      .cx_resp_valid_i            (cx_resp_valid),
       //.eFPGA_operand_a_i          (eFPGA_operand_a        ),
       //.eFPGA_operand_b_i          (eFPGA_operand_b        ),
       .eFPGA_result_a_i           (cx_resp_data),
