@@ -270,7 +270,7 @@ module ibex_core #(
         end
         // TODO: if this happens something's gone wrong anyway, so should
         // probably actually trigger an exception
-        default: cx_req_state_n <= NO_REQ;
+        default: cx_req_state_n = NO_REQ;
     endcase
   end
 
