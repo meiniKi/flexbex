@@ -82,12 +82,14 @@ module ibex_core #(
     output logic        cx_clk,
     output logic        cx_rst,
     output logic        cx_req_valid,
+    output logic        cx_resp_ready,
     output logic [1:0]  cx_cxu_id,
     output logic [1:0]  cx_state_id,
     //output logic []     cx_req_func,    // ??
     output logic [31:0] cx_req_data0,
     output logic [31:0] cx_req_data1,
 
+    input  logic        cx_req_ready,
     input  logic        cx_resp_valid,
     input  logic        cx_resp_state,
     input  logic [3:0]  cx_resp_status,
@@ -231,8 +233,54 @@ module ibex_core #(
 
   assign cx_func_o = cx_func;
   assign cx_insn_o = cx_insn;
-  assign cx_req_valid = eFPGA_en;
   assign cx_id_o = 2'b00;
+
+  // A small FSM tracking the state of the current request so that valid goes
+  // down at the right time and doesn't come up again until it's heard back
+  // This probably shouldn't be in this file, maybe outline it later but then
+  // again this is a hackathon project!
+
+  typedef enum logic[1:0] {
+    NO_REQ,
+    AWAIT_READY,
+    AWAIT_RESP
+  } cx_req_state;
+  cx_req_state cx_req_state_c, cx_req_state_n;
+
+  always_comb begin
+    unique case (cx_req_state_c)
+        NO_REQ: begin
+            cx_req_valid = eFPGA_en;
+            cx_resp_ready = 1'b0;
+            // Jump straight to awaiting response if the interface is already ready
+            if (eFPGA_en)
+                cx_req_state_n = cx_req_ready ? AWAIT_RESP : AWAIT_READY;
+        end
+
+        AWAIT_READY: begin
+            cx_req_valid = 1'b1;
+            cx_resp_ready = 1'b0;
+            if (cx_req_ready) cx_req_state_n = AWAIT_RESP;
+        end
+
+        AWAIT_RESP: begin
+            cx_req_valid = 1'b0;
+            cx_resp_ready = 1'b1;
+            if (cx_resp_valid) cx_req_state_n = NO_REQ;
+        end
+        // TODO: if this happens something's gone wrong anyway, so should
+        // probably actually trigger an exception
+        default: cx_req_state_n = NO_REQ;
+    endcase
+  end
+
+  always_ff @(posedge clk_i, negedge rst_ni) begin
+    if (!rst_ni) begin
+      cx_req_state_c <= NO_REQ;
+    end else begin
+      cx_req_state_c <= cx_req_state_n;
+    end
+  end
 
   //////////////////////
   // Clock management //
